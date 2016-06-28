@@ -1,9 +1,6 @@
 ﻿using Starter.Domain.Interfaces.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq.Expressions;
 using Starter.Domain.Interfaces.Repositories;
 
@@ -61,6 +58,11 @@ namespace Starter.Domain.Services
         public void Update(T entity)
         {
             repository.Update(entity);
+        }
+
+        public void RemoveRange(Expression<Func<T, bool>> predicate = null)
+        {
+            repository.RemoveRange(predicate);
         }
     }
 }
