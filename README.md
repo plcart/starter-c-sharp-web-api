@@ -11,4 +11,3 @@ Follow up Plan
    * OAuth
 * If-modified-Since Header
 * Upload File
-* Pagination
