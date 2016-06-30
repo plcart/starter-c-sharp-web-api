@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starter.Wep.Api", "Starter.Wep.Api\Starter.Wep.Api.csproj", "{34300261-E19B-4298-B94F-90EDA230CFCA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starter.Web.Api", "Starter.Wep.Api\Starter.Web.Api.csproj", "{34300261-E19B-4298-B94F-90EDA230CFCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starter.Wep.Api.Tests", "Starter.Wep.Api.Tests\Starter.Wep.Api.Tests.csproj", "{F508180D-4B9D-4F82-8B80-CFEEC7E35753}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starter.Web.Api.Tests", "Starter.Wep.Api.Tests\Starter.Web.Api.Tests.csproj", "{F508180D-4B9D-4F82-8B80-CFEEC7E35753}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - UI", "1 - UI", "{676A8EB9-DB7D-4005-99EC-AB218A1DE295}"
 EndProject

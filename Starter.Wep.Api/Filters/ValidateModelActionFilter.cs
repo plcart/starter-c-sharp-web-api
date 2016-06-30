@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Linq;
 
-namespace Starter.Wep.Api.Filters
+namespace Starter.Web.Api.Filters
 {
     public class ValidateModel : ActionFilterAttribute
     {
