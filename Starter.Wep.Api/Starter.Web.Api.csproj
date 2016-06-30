@@ -110,6 +110,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Binders\PaginateModelBinder.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PageTitleController.cs" />
     <Compile Include="Filters\ValidateModelActionFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
