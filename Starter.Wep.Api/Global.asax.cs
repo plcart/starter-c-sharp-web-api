@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
-using System.Web.Routing;
+﻿using System.Web.Http;
 
 namespace Starter.Web.Api
 {
@@ -11,6 +6,8 @@ namespace Starter.Web.Api
     {
         protected void Application_Start()
         {
+            IoCConfig.RegisterDependencies();
+            MapperConfig.RegisterMaps();
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
     }
