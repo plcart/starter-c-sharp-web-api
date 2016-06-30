@@ -8,10 +8,11 @@
 
     public enum MediaType
     {
-        Image = 0,
-        Video = 1,
-        Link = 2,
-        Icon = 3
+        None = 0,
+        Image = 1,
+        Video = 2,
+        Link = 3,
+        Icon = 4
     }
 
     public enum Language

@@ -50,13 +50,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\Configuration\BaseEntityMap.cs" />
+    <Compile Include="Context\Configuration\PageHighlightMap.cs" />
+    <Compile Include="Context\Configuration\PageTitleMap.cs" />
     <Compile Include="Context\StarterContext.cs" />
+    <Compile Include="Migrations\201606301255431_PageEntitiesCreation.cs" />
+    <Compile Include="Migrations\201606301255431_PageEntitiesCreation.Designer.cs">
+      <DependentUpon>201606301255431_PageEntitiesCreation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Context\Configuration\" />
+    <EmbeddedResource Include="Migrations\201606301255431_PageEntitiesCreation.resx">
+      <DependentUpon>201606301255431_PageEntitiesCreation.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
