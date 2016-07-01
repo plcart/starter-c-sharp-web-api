@@ -1,5 +1,7 @@
 ﻿using Starter.Domain.Entities;
 using Starter.Domain.Interfaces.Services;
+using Starter.Web.Api.Filters;
+using Starter.Web.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,7 @@ namespace Starter.Web.Api.Controllers
     {
         IDependencyScope resolver { get; } = GlobalConfiguration.Configuration.DependencyResolver.BeginScope();
         IServiceBase<PageTitle> pageService { get; }
-
+        static int Id = 0;
         public PageTitleController()
         {
             pageService = resolver.GetService(typeof(IServiceBase<PageTitle>)) as IServiceBase<PageTitle>;
@@ -24,7 +26,16 @@ namespace Starter.Web.Api.Controllers
         [Route("api/pages")]
         public IHttpActionResult Get()
         {
-            return Ok();
+            var s = new PageTitleModel() { Title = "sfasafa" , Id = Id };
+            return Ok(s);
+        }
+
+        [HttpPost]
+        [Route("api/pages")]
+        public IHttpActionResult Post()
+        {
+            var s = new PageTitleModel() { Title = "sfasafa", Id = Id++ };
+            return Ok(s);
         }
 
     }

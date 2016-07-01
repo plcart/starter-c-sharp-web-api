@@ -1,4 +1,5 @@
-﻿using Starter.Web.Api.Binders;
+﻿using CacheCow.Server;
+using Starter.Web.Api.Binders;
 using Starter.Web.Api.Models;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,9 @@ namespace Starter.Web.Api
         {
             // Web API configuration and services
             config.BindParameter(typeof(Paginate), new PaginateModelBinder());
+
+            var cachecow = new CachingHandler(config);
+            config.MessageHandlers.Add(cachecow);
 
             // Web API routes
             config.MapHttpAttributeRoutes();
