@@ -3,11 +3,11 @@ Starter Project for web api applications
 
 Follow up Plan
 
-* AutoMapper
- * Domain.BaseEntities
-   * Formatters
+* Formatters
 * Domain.Auth
  * JWT
    * OAuth
 * If-modified-Since Header
+* Etag
+* Cache
 * Upload File
