@@ -5,9 +5,11 @@ Follow up Plan
 
 * Formatters
 * Domain.Auth
+ * Basic
+ * Digest
  * JWT
    * OAuth
-* If-modified-Since Header
-* Etag
-* Cache
 * Upload File
+* Swagger
+* Unit Test
+* CORS
