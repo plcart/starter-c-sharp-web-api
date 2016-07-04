@@ -19,5 +19,13 @@ namespace Starter.Web.Api.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        [Route("post/")]
+        public IHttpActionResult post(FileUpload p)
+        {
+
+            return Ok();
+        }
+
     }
 }

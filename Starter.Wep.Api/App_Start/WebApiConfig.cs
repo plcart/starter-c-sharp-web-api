@@ -11,6 +11,7 @@ namespace Starter.Web.Api
         {
             // Web API configuration and services
             config.BindParameter(typeof(Paginate), new PaginateModelBinder());
+            config.BindParameter(typeof(FileUpload), new FileUploadModelBinder());
 
             var cachecow = new CachingHandler(config);
             config.MessageHandlers.Add(cachecow);

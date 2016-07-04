@@ -131,6 +131,7 @@
     <Compile Include="App_Start\IoCConfig.cs" />
     <Compile Include="App_Start\MapperConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Binders\FileUploadModelBinder.cs" />
     <Compile Include="Binders\PaginateModelBinder.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PageTitleController.cs" />
@@ -141,6 +142,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BaseEntityModel.cs" />
+    <Compile Include="Models\FileUploadModel.cs" />
     <Compile Include="Models\PageHighlightModel.cs" />
     <Compile Include="Models\PageTitleModel.cs" />
     <Compile Include="Models\PaginateModel.cs" />
