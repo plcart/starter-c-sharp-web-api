@@ -3,13 +3,13 @@ Starter Project for web api applications
 
 Follow up Plan
 
-* Formatters
+* CORS
+* Upload File
 * Domain.Auth
  * Basic
  * Digest
  * JWT
    * OAuth
-* Upload File
 * Swagger
 * Unit Test
-* CORS
+
