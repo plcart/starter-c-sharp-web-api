@@ -11,10 +11,12 @@ namespace Starter.Web.Api
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<PageTitle, PageTitleModel>();
-                cfg.CreateMap<PageTitleModel,PageTitle>();
+                cfg.CreateMap<PageTitleModel,PageTitle>()
+                    .ForMember(dest=>dest.Created,opt=>opt.Ignore())
+                    .ForMember(dest => dest.Id, opt => opt.Ignore());
                 cfg.CreateMap<PageHighlight, PageHighlightModel>();
-                cfg.CreateMap<PageHighlightModel, PageHighlight>();
-                    //.ForMember(dest => dest.application_id, opt => opt.MapFrom(src => src.Id))
+                cfg.CreateMap<PageHighlightModel, PageHighlight>()
+                    .ForMember(dest => dest.Created, opt => opt.Ignore());
             });
         }
     }

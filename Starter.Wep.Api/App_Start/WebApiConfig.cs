@@ -1,5 +1,6 @@
 ﻿using CacheCow.Server;
 using Starter.Web.Api.Binders;
+using Starter.Web.Api.Formatter.Csv;
 using Starter.Web.Api.Models;
 using System.Web.Http;
 
@@ -14,6 +15,8 @@ namespace Starter.Web.Api
 
             var cachecow = new CachingHandler(config);
             config.MessageHandlers.Add(cachecow);
+
+            config.Formatters.Add(new PageTitleModelCsvFormatter());
 
             // Web API routes
             config.MapHttpAttributeRoutes();

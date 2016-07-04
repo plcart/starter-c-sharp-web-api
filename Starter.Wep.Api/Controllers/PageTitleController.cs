@@ -46,7 +46,7 @@ namespace Starter.Web.Api.Controllers
         {
             var entity = Mapper.Map<PageTitle>(model);
             pageService.Add(entity);
-            return Created($"api/pages/{entity.Page}", Mapper.Map<PageTitleModel>(entity));
+            return Created($"http://{Request.RequestUri.Authority}/api/pages/{entity.Page}".ToLower(), Mapper.Map<PageTitleModel>(entity));
         }
 
         [HttpPut]
@@ -55,6 +55,8 @@ namespace Starter.Web.Api.Controllers
         public IHttpActionResult Put(Page page,PageTitleModel model)
         {
             var entity = pageService.Get(p => p.Page == page);
+            Mapper.Map(model, entity, typeof(PageTitleModel), typeof(PageTitle));
+            pageService.Update(entity);
             return Ok(Mapper.Map<PageTitleModel>(entity));
         }
 
