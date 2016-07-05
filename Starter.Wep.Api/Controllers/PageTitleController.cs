@@ -3,19 +3,15 @@ using Starter.Domain.Entities;
 using Starter.Domain.Interfaces.Services;
 using Starter.Web.Api.Filters;
 using Starter.Web.Api.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Web.Http.Dependencies;
 
 namespace Starter.Web.Api.Controllers
 {
-    public class PageTitleController : ApiController
+    public class PageTitleController : BaseApiController
     {
-        IDependencyScope resolver { get; } = GlobalConfiguration.Configuration.DependencyResolver.BeginScope();
+
         IServiceBase<PageTitle> pageService { get; }
 
         public PageTitleController()
@@ -25,9 +21,9 @@ namespace Starter.Web.Api.Controllers
 
         [HttpGet]
         [Route("api/pages")]
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(Paginate p)
         {
-            var entities = pageService.GetAll();
+            var entities = pageService.GetAll(skip: p.Page * p.ItemsPerPage, take: p.ItemsPerPage);
             return Ok(Mapper.Map<List<PageTitleModel>>(entities));
         }
 
@@ -52,7 +48,7 @@ namespace Starter.Web.Api.Controllers
         [HttpPut]
         [Route("api/pages/{page}")]
         [ValidateModel("model")]
-        public IHttpActionResult Put(Page page,PageTitleModel model)
+        public IHttpActionResult Put(Page page, PageTitleModel model)
         {
             var entity = pageService.Get(p => p.Page == page);
             Mapper.Map(model, entity, typeof(PageTitleModel), typeof(PageTitle));
