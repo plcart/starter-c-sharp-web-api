@@ -3,12 +3,11 @@ Starter Project for web api applications
 
 Follow up Plan
 
-* CORS
 * Domain.Auth
  * Basic
  * Digest
- * JWT
-   * OAuth
+ * Bearer - JWT
+   * OAuth - Social integration
 * Swagger
 * Unit Test
 
