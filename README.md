@@ -4,7 +4,6 @@ Starter Project for web api applications
 Follow up Plan
 
 * CORS
-* Upload File
 * Domain.Auth
  * Basic
  * Digest
