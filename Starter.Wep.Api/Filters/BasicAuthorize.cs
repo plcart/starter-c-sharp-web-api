@@ -59,7 +59,8 @@ namespace Starter.Web.Api.Filters
                     {
                         var roles = user.Profile.Roles.Select(x => x.Name).ToArray();
                         var avaliableRoles = Roles.Split(',');
-                        if (avaliableRoles.Count() > 0 &&
+                        if (!string.IsNullOrEmpty(Roles) 
+                            && avaliableRoles.Count() > 0 &&
                             !roles.Any(x => avaliableRoles.Contains(x)))
                             actionContext.Response = ForbiddenResponse(actionContext);
                         else
