@@ -10,4 +10,6 @@ Follow up Plan
    * OAuth - Social integration
 * Swagger
 * Unit Test
+* Email
+* Logger
 
