@@ -143,6 +143,7 @@
     <Compile Include="Binders\PaginateModelBinder.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\PageTitleController.cs" />
+    <Compile Include="Filters\BasicAuthorize.cs" />
     <Compile Include="Filters\ValidateModelActionFilter.cs" />
     <Compile Include="Formatters\Csv\PageTitleModelCsvFormatter.cs" />
     <Compile Include="Formatters\Xlsx\PageTitleModelXlsxFormatter.cs" />
