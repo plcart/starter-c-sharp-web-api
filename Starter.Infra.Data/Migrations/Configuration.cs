@@ -26,7 +26,7 @@ namespace Starter.Infra.Data.Migrations
                 context.Set<User>().Add(new User()
                 {
                     Name = "Billie Kim",
-                    Password = MD5.Encrypt("wildbill"),
+                    Password = MD5.Encrypt("bbkim:username:wildbill"),
                     Username = "bbkim",
                     Email = "billie.kim46@example.com",
                     ProfileId = 1

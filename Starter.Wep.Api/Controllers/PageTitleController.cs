@@ -21,6 +21,7 @@ namespace Starter.Web.Api.Controllers
 
         [HttpGet]
         [Route("api/pages")]
+        [DigestAuthorize]
         public IHttpActionResult Get(Paginate p)
         {
             var entities = pageService.GetAll(skip: p.Page * p.ItemsPerPage, take: p.ItemsPerPage);
