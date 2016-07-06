@@ -1,7 +1,10 @@
 namespace Starter.Infra.Data.Migrations
 {
+    using Domain.Entities;
+    using Helpers.Cryptography;
+    using System.Collections.Generic;
     using System.Data.Entity.Migrations;
-
+    using System.Linq;
     internal sealed class Configuration : DbMigrationsConfiguration<Context.StarterContext>
     {
         public Configuration()
@@ -11,18 +14,25 @@ namespace Starter.Infra.Data.Migrations
 
         protected override void Seed(Context.StarterContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            if (context.Set<Profile>().Count() == 0)
+                context.Set<Profile>().Add(new Profile()
+                {
+                    Name = "Administrator",
+                    Description = "",
+                    Roles = new List<Role>() { new Role() { Name = "user" } }
+                });
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            if (context.Set<User>().Count() == 0)
+                context.Set<User>().Add(new User()
+                {
+                    Name = "Billie Kim",
+                    Password = MD5.Encrypt("wildbill"),
+                    Username = "bbkim",
+                    Email = "billie.kim46@example.com",
+                    ProfileId = 1
+                });
+
+            context.SaveChanges();
         }
     }
 }

@@ -5,6 +5,7 @@ namespace Starter.Domain.Entities
     public class Profile:BaseEntity
     {
         public Profile()
+            :base()
         {
             Roles = new HashSet<Role>();
         }

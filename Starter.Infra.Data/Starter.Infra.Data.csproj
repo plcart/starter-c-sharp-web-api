@@ -57,9 +57,14 @@
     <Compile Include="Context\Configuration\UserMap.cs" />
     <Compile Include="Context\Configuration\PageTitleMap.cs" />
     <Compile Include="Context\StarterContext.cs" />
+    <Compile Include="Helpers\Cryptography\MD5.cs" />
     <Compile Include="Migrations\201606301255431_PageEntitiesCreation.cs" />
     <Compile Include="Migrations\201606301255431_PageEntitiesCreation.Designer.cs">
       <DependentUpon>201606301255431_PageEntitiesCreation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607061229049_auth-entities.cs" />
+    <Compile Include="Migrations\201607061229049_auth-entities.Designer.cs">
+      <DependentUpon>201607061229049_auth-entities.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,6 +73,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201606301255431_PageEntitiesCreation.resx">
       <DependentUpon>201606301255431_PageEntitiesCreation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607061229049_auth-entities.resx">
+      <DependentUpon>201607061229049_auth-entities.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

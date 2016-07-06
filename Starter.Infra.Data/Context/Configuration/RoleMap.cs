@@ -10,7 +10,7 @@ namespace Starter.Infra.Data.Context.Configuration
     public class RoleMap : BaseEntityMap<Role>
     {
         public RoleMap()
-            : base("page_title")
+            : base("role")
         {
             Property(x => x.Name)
                 .HasColumnName("name")
