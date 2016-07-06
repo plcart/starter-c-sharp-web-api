@@ -52,6 +52,9 @@
   <ItemGroup>
     <Compile Include="Context\Configuration\BaseEntityMap.cs" />
     <Compile Include="Context\Configuration\PageHighlightMap.cs" />
+    <Compile Include="Context\Configuration\RoleMap.cs" />
+    <Compile Include="Context\Configuration\ProfileMap.cs" />
+    <Compile Include="Context\Configuration\UserMap.cs" />
     <Compile Include="Context\Configuration\PageTitleMap.cs" />
     <Compile Include="Context\StarterContext.cs" />
     <Compile Include="Migrations\201606301255431_PageEntitiesCreation.cs" />

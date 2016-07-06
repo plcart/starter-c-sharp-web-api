@@ -45,6 +45,9 @@
     <Compile Include="Entities\Enums.cs" />
     <Compile Include="Entities\PageHighlight.cs" />
     <Compile Include="Entities\PageTitle.cs" />
+    <Compile Include="Entities\Profile.cs" />
+    <Compile Include="Entities\Role.cs" />
+    <Compile Include="Entities\User.cs" />
     <Compile Include="Interfaces\Repositories\IRepositoryBase.cs" />
     <Compile Include="Interfaces\Services\IServiceBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

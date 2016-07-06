@@ -16,6 +16,11 @@ namespace Starter.Infra.Data.Context
         public DbSet<PageTitle> PageTitles { get;}
         public DbSet<PageHighlight> PageHighlights { get; }
 
+        public DbSet<Profile> Profiles { get; }
+        public DbSet<User> Users { get; }
+        public DbSet<Role> Roles { get; }
+
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -32,6 +37,9 @@ namespace Starter.Infra.Data.Context
 
             modelBuilder.Configurations.Add(new PageTitleMap());
             modelBuilder.Configurations.Add(new PageHighlightMap());
+            modelBuilder.Configurations.Add(new UserMap());
+            modelBuilder.Configurations.Add(new ProfileMap());
+            modelBuilder.Configurations.Add(new RoleMap());
         }
     }
 }
