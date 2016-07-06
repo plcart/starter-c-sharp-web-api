@@ -22,14 +22,11 @@ namespace Starter.Web.Api.Binders
             }
 
             var model = new FileUpload();
-            string root = HttpContext.Current.Server.MapPath($"~/uploads/temp"),
-                dest = HttpContext.Current.Server.MapPath($"~/uploads/{actionContext.ControllerContext.ControllerDescriptor.ControllerName.ToLower()}");
+            string root = HttpContext.Current.Server.MapPath($"~/uploads/temp");
 
             if (!Directory.Exists(root))
                 Directory.CreateDirectory(root);
-
-            if (!Directory.Exists(dest))
-                Directory.CreateDirectory(dest);
+            
 
             var provider = new MultipartFormDataStreamProvider(root);
 
@@ -43,8 +40,7 @@ namespace Starter.Web.Api.Binders
                     fileDest = $"{Guid.NewGuid().ToString()}{fileExt}",
                     id = file.Headers.ContentDisposition.Name;
 
-                    File.Copy(file.LocalFileName, $"{dest}/{fileDest}");
-                    File.Delete(file.LocalFileName);
+                    File.Move(file.LocalFileName, $"{root}/{fileDest}");
 
                     if (model.Files.ContainsKey(id))
                         model.Files[id] += $"{fileDest};";
