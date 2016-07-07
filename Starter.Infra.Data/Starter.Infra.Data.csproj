@@ -58,6 +58,7 @@
     <Compile Include="Context\Configuration\PageTitleMap.cs" />
     <Compile Include="Context\StarterContext.cs" />
     <Compile Include="Helpers\Cryptography\MD5.cs" />
+    <Compile Include="Helpers\Extensions\StringExtension.cs" />
     <Compile Include="Migrations\201606301255431_PageEntitiesCreation.cs" />
     <Compile Include="Migrations\201606301255431_PageEntitiesCreation.Designer.cs">
       <DependentUpon>201606301255431_PageEntitiesCreation.cs</DependentUpon>
@@ -68,6 +69,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AuthRepository.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
   </ItemGroup>
   <ItemGroup>
