@@ -142,6 +142,7 @@
     <Compile Include="Binders\FileUploadModelBinder.cs" />
     <Compile Include="Binders\PaginateModelBinder.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\PageHighlightController.cs" />
     <Compile Include="Controllers\PageTitleController.cs" />
     <Compile Include="Filters\ValidateModelActionFilter.cs" />
     <Compile Include="Formatters\Csv\PageTitleModelCsvFormatter.cs" />

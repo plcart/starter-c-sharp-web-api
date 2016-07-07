@@ -7,6 +7,7 @@ namespace Starter.Infra.Data.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(Context.StarterContext context)

@@ -14,6 +14,7 @@ namespace Starter.Web.Api
                 cfg.CreateMap<PageTitleModel,PageTitle>()
                     .ForMember(dest=>dest.Created,opt=>opt.Ignore())
                     .ForMember(dest => dest.Id, opt => opt.Ignore());
+
                 cfg.CreateMap<PageHighlight, PageHighlightModel>();
                 cfg.CreateMap<PageHighlightModel, PageHighlight>()
                     .ForMember(dest => dest.Created, opt => opt.Ignore());
