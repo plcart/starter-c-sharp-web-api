@@ -12,7 +12,8 @@
         Image = 1,
         Video = 2,
         Link = 3,
-        Icon = 4
+        Icon = 4,
+        File = 5
     }
 
     public enum Language
