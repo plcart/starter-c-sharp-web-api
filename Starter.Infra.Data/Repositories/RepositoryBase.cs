@@ -21,7 +21,7 @@ namespace Starter.Infra.Data.Repositories
                 query = reverse ? query.OrderByDescending(order) : query.OrderBy(order);
             else
                 query = query.OrderBy("Id");
-            return skip != take? query.Skip(skip).Take(take) :query;
+            return take != 0? query.Skip(skip).Take(take) :query;
         };
 
         public RepositoryBase()

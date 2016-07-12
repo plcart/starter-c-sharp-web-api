@@ -11,10 +11,12 @@ namespace Starter.Web.Api.Binders
         public bool BindModel(HttpActionContext actionContext, ModelBindingContext bindingContext)
         {
             var values = actionContext.ControllerContext.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);
-            string page, items;
+            string page, items, order, reverse;
             values.TryGetValue("page", out page);
             values.TryGetValue("items", out items);
-            bindingContext.Model = new Paginate(page, items);
+            values.TryGetValue("order", out order);
+            values.TryGetValue("reverse", out reverse);
+            bindingContext.Model = new Paginate(page, items, order, reverse);
 
             return true;
         }

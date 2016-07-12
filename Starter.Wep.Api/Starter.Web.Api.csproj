@@ -141,11 +141,12 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Binders\FileUploadModelBinder.cs" />
     <Compile Include="Binders\PaginateModelBinder.cs" />
+    <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\PageHighlightController.cs" />
     <Compile Include="Controllers\PageTitleController.cs" />
     <Compile Include="Filters\BasicAuthorize.cs" />
-    <Compile Include="Filters\ValidateModelActionFilter.cs" />
-    <Compile Include="Formatters\Csv\PageTitleModelCsvFormatter.cs" />
+    <Compile Include="Filters\ValidateModelFilter.cs" />    <Compile Include="Formatters\Csv\PageTitleModelCsvFormatter.cs" />
     <Compile Include="Formatters\Xlsx\PageTitleModelXlsxFormatter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -155,6 +156,9 @@
     <Compile Include="Models\PageHighlightModel.cs" />
     <Compile Include="Models\PageTitleModel.cs" />
     <Compile Include="Models\PaginateModel.cs" />
+    <Compile Include="Models\ProfileModel.cs" />
+    <Compile Include="Models\RoleModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
