@@ -1,6 +1,8 @@
 ﻿using Starter.Domain.Entities;
 using Starter.Domain.Interfaces.Repositories;
 using Starter.Infra.Data.Helpers.Extensions;
+using System;
+using System.Linq.Expressions;
 
 namespace Starter.Infra.Data.Repositories
 {
@@ -9,7 +11,8 @@ namespace Starter.Infra.Data.Repositories
         public User Login(string username, string password)
         {
             var crypt = password.ToMD5();
-            var user = Get(x => x.Username == username && x.Password == crypt);
+            var user = Get(x => x.Username == username && x.Password == crypt,new Expression<Func<User, object>>[] {
+                x=>x.Profile.Roles });
             return user;
         }
 
