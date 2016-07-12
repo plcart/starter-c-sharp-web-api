@@ -9,7 +9,7 @@ namespace Starter.Infra.Data.Repositories
         public User Login(string username, string password)
         {
             var crypt = password.ToMD5();
-            var user = Get(x => x.Username == username && x.Password == password);
+            var user = Get(x => x.Username == username && x.Password == crypt);
             return user;
         }
 
