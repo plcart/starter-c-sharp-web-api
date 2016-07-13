@@ -3,7 +3,7 @@ using Starter.Domain.Interfaces.Services;
 using Starter.Infra.Data.Helpers.Cryptography;
 using Starter.Web.Api.Controllers;
 using System;
-using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
@@ -11,7 +11,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Principal;
 using System.Text;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 
@@ -22,8 +21,8 @@ namespace Starter.Web.Api.Filters
         Func<HttpActionContext, HttpResponseMessage> UnauthorizedResponse = (context) =>
         {
             var respose = context.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Unauthorized");
-            var nonce = Convert.ToBase64String(Encoding.UTF8.GetBytes(DateTime.Now.ToString("yyyyMMddmmss") + ":wow_such_secret"));
-            respose.Headers.WwwAuthenticate.Add(new AuthenticationHeaderValue("Digest", $"realm=\"username\", nonce=\"{nonce}\""));
+            var nonce = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{DateTime.Now.ToString("yyyyMMddmmss")}:{ConfigurationManager.AppSettings["secret"]}"));
+            respose.Headers.WwwAuthenticate.Add(new AuthenticationHeaderValue("Digest", $"realm=\"{ConfigurationManager.AppSettings["realm"]}\", nonce=\"{nonce}\""));
             return respose;
         };
 
@@ -52,9 +51,10 @@ namespace Starter.Web.Api.Filters
                 else
                 {
                     var controller = actionContext.ControllerContext.Controller as BaseApiController;
-                    var userService = controller.resolver.GetService(typeof(IServiceBase<User>)) as IServiceBase<User>;
-
-                    var user = retriveUser(userService,hValues["username"]);
+                    var userService = controller.resolver.GetService(typeof(IAuthService)) as IAuthService;
+                    var username = hValues["username"];
+                    var user = userService.Get(x => x.Username == username,new Expression<Func<User, object>>[]
+                        { x=>x.Profile.Roles});
                     if (user == null)
                         actionContext.Response = UnauthorizedResponse(actionContext);
                     else
@@ -71,7 +71,7 @@ namespace Starter.Web.Api.Filters
                                 !roles.Any(x => avaliableRoles.Contains(x)))
                                 actionContext.Response = ForbiddenResponse(actionContext);
                             else
-                                actionContext.RequestContext.Principal = new GenericPrincipal(new GenericIdentity(user.Name), roles);
+                                actionContext.RequestContext.Principal = new GenericPrincipal(new GenericIdentity(user.Username), roles);
                         }
                     }
                 }
