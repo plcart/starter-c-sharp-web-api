@@ -40,5 +40,13 @@ namespace Starter.Web.Api.Controllers
             return Ok(Mapper.Map<UserModel>(user));
         }
 
+
+        [Authorize]
+        [HttpGet]
+        [Route("api/user")]
+        public IHttpActionResult Get()
+        {
+            return Ok(new { musica="tititit" });
+        }
     }
 }
