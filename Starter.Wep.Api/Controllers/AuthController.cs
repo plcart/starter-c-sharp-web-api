@@ -3,6 +3,9 @@ using Starter.Domain.Entities;
 using Starter.Domain.Interfaces.Services;
 using Starter.Web.Api.Filters;
 using Starter.Web.Api.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Web.Http;
 
 namespace Starter.Web.Api.Controllers
@@ -32,21 +35,25 @@ namespace Starter.Web.Api.Controllers
             return Ok(Mapper.Map<UserModel>(user));
         }
 
-        [HttpPost]
-        [Route("api/login")]
-        public IHttpActionResult Login(UserModel model)
+        [HttpGet]
+        [Route("api/currentuser")]
+        [Authorize]
+        public IHttpActionResult Get()
         {
-            var user = authService.Login(model.Username, model.Password);
+            var username = ActionContext.RequestContext.Principal.Identity.Name;
+            var user = authService.Get(x => x.Username == username);
             return Ok(Mapper.Map<UserModel>(user));
         }
 
-
-        [Authorize]
         [HttpGet]
-        [Route("api/user")]
-        public IHttpActionResult Get()
+        [Route("api/currentuser/roles")]
+        [Authorize]
+        public IHttpActionResult GetRoles()
         {
-            return Ok(new { musica="tititit" });
+            var username = ActionContext.RequestContext.Principal.Identity.Name;
+            var roles = authService.Get(x => x.Username == username, new Expression<Func<User, object>>[]
+            { x=>x.Profile.Roles}).Profile.Roles;
+            return Ok(Mapper.Map<List<RoleModel>>(roles));
         }
     }
 }

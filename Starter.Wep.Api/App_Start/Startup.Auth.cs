@@ -14,7 +14,7 @@ namespace Starter.Web.Api
 
             app.UseOAuthAuthorizationServer(new OAuthAuthorizationServerOptions()
             {
-                TokenEndpointPath = new PathString("/Token"),
+                TokenEndpointPath = new PathString("/api/login"),
                 Provider = new ApplicationOAuthProvider(),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
                 AllowInsecureHttp = true

@@ -2,9 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Web.Http;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using Starter.Domain.Interfaces.Services;
 
 namespace Starter.Web.Api.Providers
 {
@@ -18,10 +19,14 @@ namespace Starter.Web.Api.Providers
 
         public override Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext c)
         {
-            if (c.UserName == "leonardo" && c.Password == "123123")
+            var authService = GlobalConfiguration.Configuration.DependencyResolver.BeginScope().GetService(typeof(IAuthService)) as IAuthService;
+            var user = authService.Login(c.UserName, c.Password);
+            if (user!=null)
             {
                 Claim claim1 = new Claim(ClaimTypes.Name, c.UserName);
-                Claim[] claims = new Claim[] { claim1 };
+                
+                var claims = new Claim[] { claim1 };
+                claims = claims.Concat(user.Profile.Roles.Select(r => new Claim(ClaimTypes.Role, r.Name))).ToArray();
                 ClaimsIdentity claimsIdentity =
                     new ClaimsIdentity(
                        claims, OAuthDefaults.AuthenticationType);
