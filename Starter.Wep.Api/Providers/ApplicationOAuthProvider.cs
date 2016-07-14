@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using Starter.Domain.Interfaces.Services;
+using Microsoft.Owin.Security;
 
 namespace Starter.Web.Api.Providers
 {
@@ -30,7 +31,8 @@ namespace Starter.Web.Api.Providers
                 ClaimsIdentity claimsIdentity =
                     new ClaimsIdentity(
                        claims, OAuthDefaults.AuthenticationType);
-                c.Validated(claimsIdentity);
+                var ticket = new AuthenticationTicket(claimsIdentity, new AuthenticationProperties());
+                c.Validated(ticket);
             }
 
             return Task.FromResult<object>(null);
