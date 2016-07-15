@@ -3,6 +3,7 @@ using Starter.Domain.Entities;
 using Starter.Domain.Interfaces.Services;
 using Starter.Web.Api.Filters;
 using Starter.Web.Api.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net;
@@ -21,6 +22,11 @@ namespace Starter.Web.Api.Controllers
             pageService = resolver.GetService(typeof(IServiceBase<PageTitle>)) as IServiceBase<PageTitle>;
         }
 
+        public PageTitleController(IServiceBase<PageTitle> p)
+        {
+            pageService = p;
+        }
+
         [HttpGet]
         [Route("api/pages")]
         public IHttpActionResult Get(Paginate p)
@@ -33,8 +39,7 @@ namespace Starter.Web.Api.Controllers
         [Route("api/pages/{page}")]
         public IHttpActionResult Get(Page page)
         {
-            var entity = pageService.Get(p => p.Page == page, new Expression<System.Func<PageTitle, object>>[]
-                {x=>x.PageHighlights });
+            var entity = pageService.Get(p => p.Page == page, null);
             return Ok(Mapper.Map<PageTitleModel>(entity));
         }
 
