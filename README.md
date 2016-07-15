@@ -1,7 +1,4 @@
 # starter-c-sharp-web-api
 Starter Project for web api applications
 
-Follow up Plan
 
-* Logger
-* Swagger
