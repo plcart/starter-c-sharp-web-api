@@ -3,6 +3,5 @@ Starter Project for web api applications
 
 Follow up Plan
 
-* Email
 * Logger
 * Swagger
