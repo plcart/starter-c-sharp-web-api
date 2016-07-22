@@ -13,6 +13,7 @@ namespace Starter.Web.Api.Models
         public string Description { get; set; }
         [Required]
         public Page Page { get; set; }
+        public string PageFormatted { get { return Page.ToString(); } }
         [Required]
         public Language Language { get; set; }
         [Required]

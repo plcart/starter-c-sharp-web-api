@@ -21,6 +21,7 @@ namespace Starter.Web.Api.Controllers
             pageService = resolver.GetService(typeof(IServiceBase<PageTitle>)) as IServiceBase<PageTitle>;
         }
 
+        [HttpOptions]
         [HttpGet]
         [Route("api/pages")]
         public IHttpActionResult Get(Paginate p)
@@ -28,8 +29,9 @@ namespace Starter.Web.Api.Controllers
             var entities = pageService.GetAll(null, p.Order, p.Reverse, p.Page * p.ItemsPerPage, p.ItemsPerPage);
             return Ok(Mapper.Map<List<PageTitleModel>>(entities));
         }
-
+        
         [HttpGet]
+        [HttpOptions]
         [Route("api/pages/{page}")]
         public IHttpActionResult Get(Page page)
         {

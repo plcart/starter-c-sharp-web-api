@@ -156,6 +156,7 @@
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\PageHighlightController.cs" />
     <Compile Include="Controllers\PageTitleController.cs" />
+    <Compile Include="Filters\CorsOptionsFilter.cs" />
     <Compile Include="Filters\ValidateModelFilter.cs" />
     <Compile Include="Formatters\Csv\PageTitleModelCsvFormatter.cs" />
     <Compile Include="Formatters\Xlsx\PageTitleModelXlsxFormatter.cs" />

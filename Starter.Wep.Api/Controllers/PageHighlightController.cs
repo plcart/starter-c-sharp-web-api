@@ -22,6 +22,7 @@ namespace Starter.Web.Api.Controllers
         }
 
         [HttpGet]
+        [HttpOptions]
         [Route("api/pages/{page}/highlights")]
         public IHttpActionResult Get(Page page, Paginate p)
         {
@@ -30,6 +31,7 @@ namespace Starter.Web.Api.Controllers
         }
 
         [HttpGet]
+        [HttpOptions]
         [Route("api/pages/{page}/highlights/{id}")]
         public IHttpActionResult Get(Page page, long id)
         {

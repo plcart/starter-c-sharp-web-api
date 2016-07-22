@@ -7,7 +7,8 @@ using System.Web.Http.Dependencies;
 
 namespace Starter.Web.Api.Controllers
 {
-    [EnableCors("*", "*", "GET,POST,PUT,DELETE,OPTIONS,HEAD")]
+    [EnableCors("*", "*", "*")]
+    [RoutePrefix("api")]
     public class BaseApiController : ApiController
     {
         public IDependencyScope resolver { get; } = GlobalConfiguration.Configuration.DependencyResolver.BeginScope();
@@ -29,6 +30,12 @@ namespace Starter.Web.Api.Controllers
         {
             string root = HttpContext.Current.Server.MapPath($"~/uploads/temp");
             File.Move($"{root}/{fileName}", $"{dest}/{fileName}");
+        }
+
+        [HttpOptions]
+        public IHttpActionResult Options()
+        {
+            return Ok();
         }
         
     }
