@@ -11,9 +11,9 @@ namespace Starter.Web.Api.Models
         [MaxLength(500)]
         public string Description { get; set; }
         [Required]
-        public Language Language { get; set; }
+        public string Language { get; set; }
         [Required]
-        public MediaType MediaType { get; set; }
+        public string MediaType { get; set; }
         [MaxLength(256)]
         public string MediaValue { get; set; }
         public long PageTitleId { get; set; }

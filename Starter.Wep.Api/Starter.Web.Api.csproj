@@ -154,6 +154,7 @@
     <Compile Include="Binders\PaginateModelBinder.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\EnumController.cs" />
     <Compile Include="Controllers\PageHighlightController.cs" />
     <Compile Include="Controllers\PageTitleController.cs" />
     <Compile Include="Filters\CorsOptionsFilter.cs" />
