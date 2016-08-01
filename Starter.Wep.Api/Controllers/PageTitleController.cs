@@ -49,17 +49,15 @@ namespace Starter.Web.Api.Controllers
             var entity = Mapper.Map<PageTitle>(model);
             if (pageService.Get(p => p.Page == entity.Page && p.Language == entity.Language) != null)
                 return BadRequest("Page Title Already Exists for this language.");
-            if (model.MediaChange && !string.IsNullOrEmpty(entity.MediaValue) &&
+            if (!string.IsNullOrEmpty(model.MediaValue))
+                entity.MediaValue = model.MediaValue;
+            if (!string.IsNullOrEmpty(entity.MediaValue) &&
                 (entity.MediaType == MediaType.Image
                 || entity.MediaType == MediaType.File))
             {
-                var files = model.MediaValue.Split(';');
-                foreach (var item in files)
-                {
-                    ChangeFileLocation(item, HttpContext.Current.Server.MapPath($"~/uploads/pagetitle"));
-                    entity.MediaValue = "uploads/pagetitle/" + item;
-                }
-
+                var file = model.MediaValue.Split(';').First();
+                ChangeFileLocation(file, HttpContext.Current.Server.MapPath($"~/uploads/pagetitle"));
+                entity.MediaValue = "uploads/pagetitle/" + file;
             }
             pageService.Add(entity);
             return Created($"http://{Request.RequestUri.Authority}/api/pages/{entity.Page}".ToLower(), Mapper.Map<PageTitleModel>(entity));

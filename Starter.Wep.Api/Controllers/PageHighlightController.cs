@@ -51,10 +51,10 @@ namespace Starter.Web.Api.Controllers
 
             var entity = Mapper.Map<PageHighlight>(model);
 
-            if (model.MediaChange && !string.IsNullOrEmpty(model.MediaValue))
+            if (!string.IsNullOrEmpty(model.MediaValue))
                 entity.MediaValue = model.MediaValue;
 
-            if (model.MediaChange && !string.IsNullOrEmpty(entity.MediaValue) && 
+            if (!string.IsNullOrEmpty(entity.MediaValue) && 
                 ( entity.MediaType == MediaType.Image
                 || entity.MediaType == MediaType.File))
             {
