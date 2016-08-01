@@ -4,6 +4,7 @@ using Starter.Domain.Interfaces.Services;
 using Starter.Web.Api.Filters;
 using Starter.Web.Api.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Http;
@@ -49,9 +50,18 @@ namespace Starter.Web.Api.Controllers
                 return NotFound();
 
             var entity = Mapper.Map<PageHighlight>(model);
-            if (entity.MediaType == MediaType.Image
-                || entity.MediaType == MediaType.File)
-                ChangeFileLocation(model.MediaValue, HttpContext.Current.Server.MapPath($"~/uploads/pagehighlight"));
+
+            if (model.MediaChange && !string.IsNullOrEmpty(model.MediaValue))
+                entity.MediaValue = model.MediaValue;
+
+            if (model.MediaChange && !string.IsNullOrEmpty(entity.MediaValue) && 
+                ( entity.MediaType == MediaType.Image
+                || entity.MediaType == MediaType.File))
+            {
+                var file = model.MediaValue.Split(';').First();
+                ChangeFileLocation(file, HttpContext.Current.Server.MapPath($"~/uploads/pagehighlight"));
+                entity.MediaValue = "uploads/pagehighlight/" + file;
+            }
             parent.PageHighlights.Add(entity);
             pageService.Update(parent);
             return Created($"http://{Request.RequestUri.Authority}/api/pages/{parent.Page}/highlights/{model.Id}",
@@ -68,9 +78,18 @@ namespace Starter.Web.Api.Controllers
                 return NotFound();
 
             Mapper.Map(model, entity, typeof(PageHighlightModel), typeof(PageHighlight));
-            if (entity.MediaType == MediaType.Image
-                || entity.MediaType == MediaType.File)
-                ChangeFileLocation(model.MediaValue, HttpContext.Current.Server.MapPath($"~/uploads/pagehighlight"));
+
+            if (model.MediaChange && !string.IsNullOrEmpty(model.MediaValue))
+                entity.MediaValue = model.MediaValue;
+
+            if (model.MediaChange && !string.IsNullOrEmpty(entity.MediaValue) &&
+                (entity.MediaType == MediaType.Image
+                || entity.MediaType == MediaType.File))
+            {
+                var file = model.MediaValue.Split(';').First();
+                ChangeFileLocation(file, HttpContext.Current.Server.MapPath($"~/uploads/pagehighlight"));
+                entity.MediaValue = "uploads/pagehighlight/" + file;
+            }
 
             highlightService.Update(entity);
             return Ok(Mapper.Map<PageHighlightModel>(entity));

@@ -16,6 +16,7 @@ namespace Starter.Web.Api.Models
         public string MediaType { get; set; }
         [MaxLength(256)]
         public string MediaValue { get; set; }
+        public bool MediaChange { get; set; } = false;
         public long PageTitleId { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using Starter.Domain.Interfaces.Services;
 using Starter.Web.Api.Filters;
 using Starter.Web.Api.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Web;
@@ -29,14 +30,13 @@ namespace Starter.Web.Api.Controllers
             var entities = pageService.GetAll(null, p.Order, p.Reverse, p.Page * p.ItemsPerPage, p.ItemsPerPage);
             return Ok(Mapper.Map<List<PageTitleModel>>(entities));
         }
-        
+
         [HttpGet]
         [HttpOptions]
         [Route("api/pages/{page}/{language}")]
-        public IHttpActionResult Get(Page page,Language language)
+        public IHttpActionResult Get(Page page, Language language)
         {
-            var entity = pageService.Get(p => p.Page == page && p.Language== language, new Expression<System.Func<PageTitle, object>>[]
-                {x=>x.PageHighlights });
+            var entity = pageService.Get(p => p.Page == page && p.Language == language);
             return Ok(Mapper.Map<PageTitleModel>(entity));
         }
 
@@ -45,13 +45,22 @@ namespace Starter.Web.Api.Controllers
         [ValidateModel("model")]
         public IHttpActionResult Post(PageTitleModel model)
         {
-            
+
             var entity = Mapper.Map<PageTitle>(model);
             if (pageService.Get(p => p.Page == entity.Page && p.Language == entity.Language) != null)
                 return BadRequest("Page Title Already Exists for this language.");
-            if (entity.MediaType == MediaType.Image
-                || entity.MediaType == MediaType.File)
-                ChangeFileLocation(model.MediaValue, HttpContext.Current.Server.MapPath($"~/uploads/pagetitle"));
+            if (model.MediaChange && !string.IsNullOrEmpty(entity.MediaValue) &&
+                (entity.MediaType == MediaType.Image
+                || entity.MediaType == MediaType.File))
+            {
+                var files = model.MediaValue.Split(';');
+                foreach (var item in files)
+                {
+                    ChangeFileLocation(item, HttpContext.Current.Server.MapPath($"~/uploads/pagetitle"));
+                    entity.MediaValue = "uploads/pagetitle/" + item;
+                }
+
+            }
             pageService.Add(entity);
             return Created($"http://{Request.RequestUri.Authority}/api/pages/{entity.Page}".ToLower(), Mapper.Map<PageTitleModel>(entity));
         }
@@ -59,20 +68,28 @@ namespace Starter.Web.Api.Controllers
         [HttpPut]
         [Route("api/pages/{page}/{language}")]
         [ValidateModel("model")]
-        public IHttpActionResult Put(Page page,Language language,PageTitleModel model)
+        public IHttpActionResult Put(Page page, Language language, PageTitleModel model)
         {
             var entity = pageService.Get(p => p.Page == page && p.Language == language);
             Mapper.Map(model, entity, typeof(PageTitleModel), typeof(PageTitle));
-            if (entity.MediaType == MediaType.Image
-                || entity.MediaType == MediaType.File)
-                ChangeFileLocation(model.MediaValue, HttpContext.Current.Server.MapPath($"~/uploads/pagetitle"));
+
+            if (model.MediaChange && !string.IsNullOrEmpty(model.MediaValue))
+                entity.MediaValue = model.MediaValue;
+            if (model.MediaChange && !string.IsNullOrEmpty(entity.MediaValue) &&
+                (entity.MediaType == MediaType.Image
+                || entity.MediaType == MediaType.File))
+            {
+                var file = model.MediaValue.Split(';').First();
+                ChangeFileLocation(file, HttpContext.Current.Server.MapPath($"~/uploads/pagetitle"));
+                entity.MediaValue = "uploads/pagetitle/" + file;
+            }
             pageService.Update(entity);
             return Ok(Mapper.Map<PageTitleModel>(entity));
         }
 
         [HttpDelete]
         [Route("api/pages/{page}/{language}")]
-        public IHttpActionResult Delete(Page page,Language language)
+        public IHttpActionResult Delete(Page page, Language language)
         {
             var entity = pageService.Get(p => p.Page == page && p.Language == language);
             pageService.Remove(entity);
