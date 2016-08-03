@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
@@ -25,9 +26,14 @@ namespace Starter.Web.Api.Controllers
         [HttpOptions]
         [HttpGet]
         [Route("api/pages")]
+        [PaginateHeader]
         public IHttpActionResult Get(Paginate p)
         {
-            var entities = pageService.GetAll(null, p.Order, p.Reverse, p.Page * p.ItemsPerPage, p.ItemsPerPage);
+            long itens = 0;
+            var entities = pageService.GetAll(ref itens, null, p.Order, p.Reverse, p.Page * p.ItemsPerPage, p.ItemsPerPage);
+
+            ActionContext.Request.Headers.Add("X-Total", itens.ToString());
+
             return Ok(Mapper.Map<List<PageTitleModel>>(entities));
         }
 

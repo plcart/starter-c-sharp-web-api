@@ -25,9 +25,12 @@ namespace Starter.Web.Api.Controllers
         [HttpGet]
         [HttpOptions]
         [Route("api/pages/{page}/{language}/highlights")]
-        public IHttpActionResult Get(Page page,Language language, Paginate p)
+        [PaginateHeader]
+        public IHttpActionResult Get(Page page, Language language, Paginate p)
         {
-            var entities = highlightService.GetAll(x => x.PageTitle.Page == page && x.PageTitle.Language ==language, null, p.Order, p.Reverse, p.ItemsPerPage * p.Page, p.ItemsPerPage);
+            long itens = 0;
+            var entities = highlightService.GetAll(ref itens, x => x.PageTitle.Page == page && x.PageTitle.Language == language, null, p.Order, p.Reverse, p.ItemsPerPage * p.Page, p.ItemsPerPage);
+            ActionContext.Request.Headers.Add("X-Total", itens.ToString());
             return Ok(Mapper.Map<List<PageHighlightModel>>(entities));
         }
 
@@ -54,8 +57,8 @@ namespace Starter.Web.Api.Controllers
             if (!string.IsNullOrEmpty(model.MediaValue))
                 entity.MediaValue = model.MediaValue;
 
-            if (!string.IsNullOrEmpty(entity.MediaValue) && 
-                ( entity.MediaType == MediaType.Image
+            if (!string.IsNullOrEmpty(entity.MediaValue) &&
+                (entity.MediaType == MediaType.Image
                 || entity.MediaType == MediaType.File))
             {
                 var file = model.MediaValue.Split(';').First();
@@ -99,14 +102,14 @@ namespace Starter.Web.Api.Controllers
         [Route("api/pages/{page}/{language}/highlights/{id}")]
         public IHttpActionResult Delete(Page page, Language language, long id)
         {
-            var entity = highlightService.Get(p => p.PageTitle.Page == page && p.PageTitle.Language == language && p.Id==id);
+            var entity = highlightService.Get(p => p.PageTitle.Page == page && p.PageTitle.Language == language && p.Id == id);
             highlightService.Remove(entity);
             return StatusCode(HttpStatusCode.NoContent);
         }
 
         [HttpDelete]
         [Route("api/pages/{page}/{language}/highlights")]
-        public IHttpActionResult Delete(Page page,Language language)
+        public IHttpActionResult Delete(Page page, Language language)
         {
             highlightService.RemoveRange(x => x.PageTitle.Page == page && x.PageTitle.Language == language);
             return StatusCode(HttpStatusCode.NoContent);
