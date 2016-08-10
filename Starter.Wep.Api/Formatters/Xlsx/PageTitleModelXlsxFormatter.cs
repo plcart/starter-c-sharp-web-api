@@ -1,4 +1,5 @@
 ﻿using OfficeOpenXml;
+using Starter.Infra.Data.Helpers.Extensions;
 using Starter.Web.Api.Models;
 using System;
 using System.Collections.Generic;
@@ -48,10 +49,12 @@ namespace Starter.Web.Api.Formatter.Xls
                     if (singleProduct == null)
                         throw new InvalidOperationException("Cannot serialize type");
                 }
-
-                var array = pck.GetAsByteArray();
-
-                writeStream.Write(array, 0, array.Length);
+                using (StreamWriter file = new StreamWriter(writeStream))
+                {
+                    file.WriteLine(Convert.ToBase64String(pck.GetAsByteArray()));
+                    file.Flush();
+                }
+                
             }
         }
     }

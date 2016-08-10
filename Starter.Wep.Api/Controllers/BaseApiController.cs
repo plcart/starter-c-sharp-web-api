@@ -7,7 +7,7 @@ using System.Web.Http.Dependencies;
 
 namespace Starter.Web.Api.Controllers
 {
-    [EnableCors("*", "*", "GET,POST,PUT,DELETE,OPTIONS,HEAD")]
+    [EnableCors("*", "*", "*")]
     public class BaseApiController : ApiController
     {
         public IDependencyScope resolver { get; } = GlobalConfiguration.Configuration.DependencyResolver.BeginScope();
@@ -25,11 +25,21 @@ namespace Starter.Web.Api.Controllers
         }
 
         [NonAction]
-        public void ChangeFileLocation(string fileName,string dest)
+        public void ChangeFileLocation(string fileName, string dest)
         {
             string root = HttpContext.Current.Server.MapPath($"~/uploads/temp");
-            File.Move($"{root}/{fileName}", $"{dest}/{fileName}");
+            if (!Directory.Exists(dest))
+                Directory.CreateDirectory(dest);
+
+            if (File.Exists($"{root}\\{fileName}"))
+                File.Move($"{root}\\{fileName}", $"{dest}\\{fileName}");
         }
-        
+
+        [HttpOptions]
+        public IHttpActionResult Options()
+        {
+            return Ok();
+        }
+
     }
 }
