@@ -4,8 +4,10 @@ using Starter.Domain.Interfaces.Services;
 using Starter.Web.Api.Filters;
 using Starter.Web.Api.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
@@ -21,21 +23,27 @@ namespace Starter.Web.Api.Controllers
             pageService = resolver.GetService(typeof(IServiceBase<PageTitle>)) as IServiceBase<PageTitle>;
         }
 
+        [HttpOptions]
         [HttpGet]
         [Route("api/pages")]
+        [PaginateHeader]
         [DigestAuthorize]
         public IHttpActionResult Get(Paginate p)
         {
-            var entities = pageService.GetAll(null, p.Order, p.Reverse, p.Page * p.ItemsPerPage, p.ItemsPerPage);
+            long itens = 0;
+            var entities = pageService.GetAll(ref itens, null, p.Order, p.Reverse, p.Page * p.ItemsPerPage, p.ItemsPerPage);
+
+            ActionContext.Request.Headers.Add("X-Total", itens.ToString());
+
             return Ok(Mapper.Map<List<PageTitleModel>>(entities));
         }
 
         [HttpGet]
-        [Route("api/pages/{page}")]
-        public IHttpActionResult Get(Page page)
+        [HttpOptions]
+        [Route("api/pages/{page}/{language}")]
+        public IHttpActionResult Get(Page page, Language language)
         {
-            var entity = pageService.Get(p => p.Page == page, new Expression<System.Func<PageTitle, object>>[]
-                {x=>x.PageHighlights });
+            var entity = pageService.Get(p => p.Page == page && p.Language == language);
             return Ok(Mapper.Map<PageTitleModel>(entity));
         }
 
@@ -44,33 +52,51 @@ namespace Starter.Web.Api.Controllers
         [ValidateModel("model")]
         public IHttpActionResult Post(PageTitleModel model)
         {
+
             var entity = Mapper.Map<PageTitle>(model);
-            if (model.MediaType == MediaType.Image
-                || model.MediaType == MediaType.File)
-                ChangeFileLocation(model.MediaValue, HttpContext.Current.Server.MapPath($"~/uploads/pagetitle"));
+            if (pageService.Get(p => p.Page == entity.Page && p.Language == entity.Language) != null)
+                return BadRequest("Page Title Already Exists for this language.");
+            if (!string.IsNullOrEmpty(model.MediaValue))
+                entity.MediaValue = model.MediaValue;
+            if (!string.IsNullOrEmpty(entity.MediaValue) &&
+                (entity.MediaType == MediaType.Image
+                || entity.MediaType == MediaType.File))
+            {
+                var file = model.MediaValue.Split(';').First();
+                ChangeFileLocation(file, HttpContext.Current.Server.MapPath($"~/uploads/pagetitle"));
+                entity.MediaValue = "uploads/pagetitle/" + file;
+            }
             pageService.Add(entity);
             return Created($"http://{Request.RequestUri.Authority}/api/pages/{entity.Page}".ToLower(), Mapper.Map<PageTitleModel>(entity));
         }
 
         [HttpPut]
-        [Route("api/pages/{page}")]
+        [Route("api/pages/{page}/{language}")]
         [ValidateModel("model")]
-        public IHttpActionResult Put(Page page, PageTitleModel model)
+        public IHttpActionResult Put(Page page, Language language, PageTitleModel model)
         {
-            var entity = pageService.Get(p => p.Page == page);
+            var entity = pageService.Get(p => p.Page == page && p.Language == language);
             Mapper.Map(model, entity, typeof(PageTitleModel), typeof(PageTitle));
-            if (model.MediaType == MediaType.Image
-                || model.MediaType == MediaType.File)
-                ChangeFileLocation(model.MediaValue, HttpContext.Current.Server.MapPath($"~/uploads/pagetitle"));
+
+            if (model.MediaChange && !string.IsNullOrEmpty(model.MediaValue))
+                entity.MediaValue = model.MediaValue;
+            if (model.MediaChange && !string.IsNullOrEmpty(entity.MediaValue) &&
+                (entity.MediaType == MediaType.Image
+                || entity.MediaType == MediaType.File))
+            {
+                var file = model.MediaValue.Split(';').First();
+                ChangeFileLocation(file, HttpContext.Current.Server.MapPath($"~/uploads/pagetitle"));
+                entity.MediaValue = "uploads/pagetitle/" + file;
+            }
             pageService.Update(entity);
             return Ok(Mapper.Map<PageTitleModel>(entity));
         }
 
         [HttpDelete]
-        [Route("api/pages/{page}")]
-        public IHttpActionResult Delete(Page page)
+        [Route("api/pages/{page}/{language}")]
+        public IHttpActionResult Delete(Page page, Language language)
         {
-            var entity = pageService.Get(p => p.Page == page);
+            var entity = pageService.Get(p => p.Page == page && p.Language == language);
             pageService.Remove(entity);
             return StatusCode(HttpStatusCode.NoContent);
         }

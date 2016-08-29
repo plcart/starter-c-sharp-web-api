@@ -1,4 +1,5 @@
-﻿using Starter.Web.Api.Models;
+﻿using Starter.Infra.Data.Helpers.Extensions;
+using Starter.Web.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,18 +40,20 @@ namespace Starter.Web.Api.Formatter.Csv
         {
             using (var writer = new StreamWriter(writeStream))
             {
-                writer.WriteLine("Id,Page,Title,Description,MediaType,Language");
+                var result = "Id,Page,Title,Description,MediaType,Language\n";
                 var pages = value as IEnumerable<PageTitleModel>;
+                
                 if (pages != null)
-                    writer.Write(pages.Aggregate(new StringBuilder(), (sb, c) =>
-                    sb.AppendLine($"{c.Id},{c.Page},{c.Title},{c.Description},{c.MediaType},{c.Language}")));
+                    result+= pages.Aggregate(new StringBuilder(), (sb, c) =>  sb.AppendLine($"{c.Id},{c.Page},{c.Title},{c.Description},{c.MediaType},{c.Language}"));
                 else
                 {
                     var singleProduct = value as PageTitleModel;
                     if (singleProduct == null)
                         throw new InvalidOperationException("Cannot serialize type");
-                    writer.WriteLine($"{singleProduct.Id},{singleProduct.Page},{singleProduct.Title},{singleProduct.Description},{singleProduct.MediaType},{singleProduct.Language}");
+                    result += $"{singleProduct.Id},{singleProduct.Page},{singleProduct.Title},{singleProduct.Description},{singleProduct.MediaType},{singleProduct.Language}";
                 }
+                var base64 = Convert.ToBase64String(result.ToByteArray());
+                writer.WriteLine(base64);
             }
         }
     }

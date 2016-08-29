@@ -4,6 +4,7 @@ using Starter.Domain.Interfaces.Services;
 using Starter.Web.Api.Filters;
 using Starter.Web.Api.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Http;
@@ -22,34 +23,48 @@ namespace Starter.Web.Api.Controllers
         }
 
         [HttpGet]
-        [Route("api/pages/{page}/highlights")]
-        public IHttpActionResult Get(Page page, Paginate p)
+        [HttpOptions]
+        [Route("api/pages/{page}/{language}/highlights")]
+        [PaginateHeader]
+        public IHttpActionResult Get(Page page, Language language, Paginate p)
         {
-            var entities = highlightService.GetAll(x => x.PageTitle.Page == page, null, p.Order, p.Reverse, p.ItemsPerPage * p.Page, p.ItemsPerPage);
+            long itens = 0;
+            var entities = highlightService.GetAll(ref itens, x => x.PageTitle.Page == page && x.PageTitle.Language == language, null, p.Order, p.Reverse, p.ItemsPerPage * p.Page, p.ItemsPerPage);
+            ActionContext.Request.Headers.Add("X-Total", itens.ToString());
             return Ok(Mapper.Map<List<PageHighlightModel>>(entities));
         }
 
         [HttpGet]
-        [Route("api/pages/{page}/highlights/{id}")]
-        public IHttpActionResult Get(Page page, long id)
+        [HttpOptions]
+        [Route("api/pages/{page}/{language}/highlights/{id}")]
+        public IHttpActionResult Get(Page page, Language language, long id)
         {
-            var entity = highlightService.Get(x => x.PageTitle.Page == page && x.Id == id);
+            var entity = highlightService.Get(x => x.PageTitle.Page == page && x.PageTitle.Language == language && x.Id == id);
             return Ok(Mapper.Map<PageHighlightModel>(entity));
         }
 
         [HttpPost]
-        [Route("api/pages/{page}/highlights")]
+        [Route("api/pages/{page}/{language}/highlights")]
         [ValidateModel("model")]
-        public IHttpActionResult Post(Page page, PageHighlightModel model)
+        public IHttpActionResult Post(Page page, Language language, PageHighlightModel model)
         {
-            var parent = pageService.Get(x => x.Page == page);
+            var parent = pageService.Get(x => x.Page == page && x.Language == language);
             if (parent == null)
                 return NotFound();
 
             var entity = Mapper.Map<PageHighlight>(model);
-            if (model.MediaType == MediaType.Image
-                || model.MediaType == MediaType.File)
-                ChangeFileLocation(model.MediaValue, HttpContext.Current.Server.MapPath($"~/uploads/pagehighlight"));
+
+            if (!string.IsNullOrEmpty(model.MediaValue))
+                entity.MediaValue = model.MediaValue;
+
+            if (!string.IsNullOrEmpty(entity.MediaValue) &&
+                (entity.MediaType == MediaType.Image
+                || entity.MediaType == MediaType.File))
+            {
+                var file = model.MediaValue.Split(';').First();
+                ChangeFileLocation(file, HttpContext.Current.Server.MapPath($"~/uploads/pagehighlight"));
+                entity.MediaValue = "uploads/pagehighlight/" + file;
+            }
             parent.PageHighlights.Add(entity);
             pageService.Update(parent);
             return Created($"http://{Request.RequestUri.Authority}/api/pages/{parent.Page}/highlights/{model.Id}",
@@ -57,37 +72,46 @@ namespace Starter.Web.Api.Controllers
         }
 
         [HttpPut]
-        [Route("api/pages/{page}/highlights/{id}")]
+        [Route("api/pages/{page}/{language}/highlights/{id}")]
         [ValidateModel("model")]
-        public IHttpActionResult Put(Page page, long id, PageHighlightModel model)
+        public IHttpActionResult Put(Page page, Language language, long id, PageHighlightModel model)
         {
-            var entity = highlightService.Get(x => x.PageTitle.Page == page && x.Id == id);
+            var entity = highlightService.Get(x => x.PageTitle.Page == page && x.PageTitle.Language == language && x.Id == id);
             if (entity == null)
                 return NotFound();
 
             Mapper.Map(model, entity, typeof(PageHighlightModel), typeof(PageHighlight));
-            if (model.MediaType == MediaType.Image
-                || model.MediaType == MediaType.File)
-                ChangeFileLocation(model.MediaValue, HttpContext.Current.Server.MapPath($"~/uploads/pagehighlight"));
+
+            if (model.MediaChange && !string.IsNullOrEmpty(model.MediaValue))
+                entity.MediaValue = model.MediaValue;
+
+            if (model.MediaChange && !string.IsNullOrEmpty(entity.MediaValue) &&
+                (entity.MediaType == MediaType.Image
+                || entity.MediaType == MediaType.File))
+            {
+                var file = model.MediaValue.Split(';').First();
+                ChangeFileLocation(file, HttpContext.Current.Server.MapPath($"~/uploads/pagehighlight"));
+                entity.MediaValue = "uploads/pagehighlight/" + file;
+            }
 
             highlightService.Update(entity);
             return Ok(Mapper.Map<PageHighlightModel>(entity));
         }
 
         [HttpDelete]
-        [Route("api/pages/{page}/highlights/{id}")]
-        public IHttpActionResult Delete(Page page,long id)
+        [Route("api/pages/{page}/{language}/highlights/{id}")]
+        public IHttpActionResult Delete(Page page, Language language, long id)
         {
-            var entity = highlightService.Get(p => p.PageTitle.Page == page && p.Id==id);
+            var entity = highlightService.Get(p => p.PageTitle.Page == page && p.PageTitle.Language == language && p.Id == id);
             highlightService.Remove(entity);
             return StatusCode(HttpStatusCode.NoContent);
         }
 
         [HttpDelete]
-        [Route("api/pages/{page}/highlights")]
-        public IHttpActionResult Delete(Page page)
+        [Route("api/pages/{page}/{language}/highlights")]
+        public IHttpActionResult Delete(Page page, Language language)
         {
-            highlightService.RemoveRange(x => x.PageTitle.Page == page);
+            highlightService.RemoveRange(x => x.PageTitle.Page == page && x.PageTitle.Language == language);
             return StatusCode(HttpStatusCode.NoContent);
         }
 
