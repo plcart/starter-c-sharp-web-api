@@ -30,6 +30,11 @@ namespace Starter.Web.Api.Filters
 
         public override void OnAuthorization(HttpActionContext actionContext)
         {
+            if (actionContext.Request.Method == HttpMethod.Options)
+            {
+                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.OK);
+                return;
+            }
             var auth = actionContext.Request.Headers.Authorization;
             if (auth == null || string.IsNullOrEmpty(auth.Parameter) || auth.Scheme != "Basic")
                 actionContext.Response = UnauthorizedResponse(actionContext);

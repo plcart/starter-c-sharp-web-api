@@ -29,6 +29,7 @@ namespace Starter.Web.Api.Controllers
         /// <param name="model">user model</param>
         /// <remarks>Should have unique username</remarks>
         [HttpPost]
+        [HttpOptions]
         [Route("api/register")]
         [ValidateModel("model")]
         [SwaggerResponse(200, "Created User", typeof(UserModel))]
@@ -48,6 +49,7 @@ namespace Starter.Web.Api.Controllers
         /// </summary>
         /// <param name="model"></param>
         [HttpPost]
+        [HttpOptions]
         [Route("api/login")]
         [SwaggerResponse(200, "User Model", typeof(UserModel))]
         [SwaggerResponse(404, "User Not Found")]
@@ -61,6 +63,7 @@ namespace Starter.Web.Api.Controllers
         }
 
         [HttpGet]
+        [HttpOptions]
         [Route("api/currentuser")]
         [BasicAuthorize]
         public IHttpActionResult Get()
@@ -71,6 +74,7 @@ namespace Starter.Web.Api.Controllers
         }
 
         [HttpGet]
+        [HttpOptions]
         [Route("api/currentuser/roles")]
         [BasicAuthorize]
         public IHttpActionResult GetRoles()
@@ -80,6 +84,5 @@ namespace Starter.Web.Api.Controllers
             { x=>x.Profile.Roles}).Profile.Roles;
             return Ok(Mapper.Map<List<RoleModel>>(roles));
         }
-
     }
 }
