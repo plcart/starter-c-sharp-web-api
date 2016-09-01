@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Swashbuckle.Swagger.Annotations;
 using System.Web.Http;
+using System.Configuration;
+using System.Text;
 
 namespace Starter.Web.Api.Controllers
 {
@@ -29,6 +31,7 @@ namespace Starter.Web.Api.Controllers
         /// <param name="model">user model</param>
         /// <remarks>Should have unique username</remarks>
         [HttpPost]
+        [HttpOptions]
         [Route("api/register")]
         [ValidateModel("model")]
         [SwaggerResponse(200, "Created User", typeof(UserModel))]
@@ -48,6 +51,7 @@ namespace Starter.Web.Api.Controllers
         /// </summary>
         /// <param name="model"></param>
         [HttpPost]
+        [HttpOptions]
         [Route("api/login")]
         [SwaggerResponse(200, "User Model", typeof(UserModel))]
         [SwaggerResponse(404, "User Not Found")]
@@ -55,13 +59,19 @@ namespace Starter.Web.Api.Controllers
         {
             var user = authService.Login(model.Username, model.Password);
             if (user != null)
-                return Ok(Mapper.Map<UserModel>(user));
+                return Ok(new
+                {
+                    user = Mapper.Map<UserModel>(user),
+                    realm = ConfigurationManager.AppSettings["realm"],
+                    nonce = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{DateTime.Now.ToString("yyyyMMddmmss")}:{ConfigurationManager.AppSettings["secret"]}"))
+        });
             else
                 return NotFound();
         }
 
+
         [HttpGet]
-        [HttpHead]
+        [HttpOptions]
         [Route("api/currentuser")]
         [DigestAuthorize]
         public IHttpActionResult Get()
@@ -72,6 +82,7 @@ namespace Starter.Web.Api.Controllers
         }
 
         [HttpGet]
+        [HttpOptions]
         [Route("api/currentuser/roles")]
         [DigestAuthorize]
         public IHttpActionResult GetRoles()
