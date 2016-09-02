@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Starter.Web.Api</name>
+    </assembly>
+    <members>
+        <member name="M:Starter.Web.Api.Controllers.AuthController.Register(Starter.Web.Api.Models.UserModel)">
+            <summary>
+            Register a new user
+            </summary>
+            <param name="model">user model</param>
+            <remarks>Should have unique username</remarks>
+        </member>
+    </members>
+</doc>

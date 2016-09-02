@@ -6,6 +6,7 @@ using Starter.Web.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Swashbuckle.Swagger.Annotations;
 using System.Web.Http;
 
 namespace Starter.Web.Api.Controllers
@@ -22,9 +23,16 @@ namespace Starter.Web.Api.Controllers
             profileService = resolver.GetService(typeof(IServiceBase<Domain.Entities.Profile>)) as IServiceBase<Domain.Entities.Profile>;
         }
 
+        /// <summary>
+        /// Register a new user
+        /// </summary>
+        /// <param name="model">user model</param>
+        /// <remarks>Should have unique username</remarks>
         [HttpPost]
         [Route("api/register")]
         [ValidateModel("model")]
+        [SwaggerResponse(200, "Created User", typeof(UserModel))]
+        [SwaggerResponse(412, "Wrong model or existing username")]
         public IHttpActionResult Register(UserModel model)
         {
             model.ProfileId = profileService.Get(x => !x.Deleted.HasValue)?.Id ?? 1;
