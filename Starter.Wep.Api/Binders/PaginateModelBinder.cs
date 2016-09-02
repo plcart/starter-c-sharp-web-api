@@ -12,7 +12,7 @@ namespace Starter.Web.Api.Binders
         {
             var values = actionContext.ControllerContext.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);
             string page, items, order, reverse;
-            values.TryGetValue("page", out page);
+            values.TryGetValue("pageindex", out page);
             values.TryGetValue("items", out items);
             values.TryGetValue("order", out order);
             values.TryGetValue("reverse", out reverse);
