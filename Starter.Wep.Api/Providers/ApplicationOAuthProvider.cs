@@ -12,6 +12,18 @@ namespace Starter.Web.Api.Providers
 {
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
+        public override Task MatchEndpoint(OAuthMatchEndpointContext context)
+        {
+            if (context.OwinContext.Request.Method == "OPTIONS")
+            {
+                context.OwinContext.Response.StatusCode = 200;
+                context.RequestCompleted();
+                return Task.FromResult<object>(null);
+            }
+
+            return base.MatchEndpoint(context);
+        }
+
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
             context.Validated();
@@ -22,10 +34,10 @@ namespace Starter.Web.Api.Providers
         {
             var authService = GlobalConfiguration.Configuration.DependencyResolver.BeginScope().GetService(typeof(IAuthService)) as IAuthService;
             var user = authService.Login(c.UserName, c.Password);
-            if (user!=null)
+            if (user != null)
             {
                 Claim claim1 = new Claim(ClaimTypes.Name, c.UserName);
-                
+
                 var claims = new Claim[] { claim1 };
                 claims = claims.Concat(user.Profile.Roles.Select(r => new Claim(ClaimTypes.Role, r.Name))).ToArray();
                 ClaimsIdentity claimsIdentity =
