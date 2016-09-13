@@ -12,7 +12,7 @@ namespace Starter.Web.Api
         {
             // Web API configuration and services
 
-            config.Filters.Add(new CorsOptions());
+            
 
             config.BindParameter(typeof(Paginate), new PaginateModelBinder());
             config.BindParameter(typeof(FileUpload), new FileUploadModelBinder());
@@ -32,6 +32,7 @@ namespace Starter.Web.Api
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            
             
         }
     }
