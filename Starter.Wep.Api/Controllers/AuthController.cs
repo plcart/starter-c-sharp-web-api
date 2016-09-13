@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Swashbuckle.Swagger.Annotations;
 using System.Web.Http;
+using Microsoft.Owin.Security.OAuth;
 
 namespace Starter.Web.Api.Controllers
 {
@@ -29,6 +30,7 @@ namespace Starter.Web.Api.Controllers
         /// <param name="model">user model</param>
         /// <remarks>Should have unique username</remarks>
         [HttpPost]
+        [HttpOptions]
         [Route("api/register")]
         [ValidateModel("model")]
         [SwaggerResponse(200, "Created User", typeof(UserModel))]
@@ -43,6 +45,8 @@ namespace Starter.Web.Api.Controllers
             return Ok(Mapper.Map<UserModel>(user));
         }
 
+
+        [HttpOptions]
         [HttpGet]
         [Route("api/currentuser")]
         [Authorize]
@@ -53,6 +57,7 @@ namespace Starter.Web.Api.Controllers
             return Ok(Mapper.Map<UserModel>(user));
         }
 
+        [HttpOptions]
         [HttpGet]
         [Route("api/currentuser/roles")]
         [Authorize]
