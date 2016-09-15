@@ -11,6 +11,7 @@ namespace Starter.Web.Api.Controllers
     public class EnumController : BaseApiController
     {
         [HttpGet]
+        [HttpOptions]
         [Route("api/enums/pages")]
         public IHttpActionResult GetPages()
         {
@@ -18,6 +19,7 @@ namespace Starter.Web.Api.Controllers
         }
 
         [HttpGet]
+        [HttpOptions]
         [Route("api/enums/mediatypes")]
         public IHttpActionResult GetMediaTypes()
         {
@@ -25,6 +27,7 @@ namespace Starter.Web.Api.Controllers
         }
 
         [HttpGet]
+        [HttpOptions]
         [Route("api/enums/languages")]
         public IHttpActionResult GetLanguages()
         {
